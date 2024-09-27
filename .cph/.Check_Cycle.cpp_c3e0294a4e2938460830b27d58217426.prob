@@ -1,0 +1,1 @@
+{"name":"Local: Check_Cycle","url":"c:\\Users\\shiva\\OneDrive\\Desktop\\DSA\\Check_Cycle.cpp","tests":[{"id":1725786839772,"input":"7 6\n1 2\n1 3\n1 7\n3 4\n4 5\n5 6\n6 3","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\Users\\shiva\\OneDrive\\Desktop\\DSA\\Check_Cycle.cpp","group":"local","local":true}
