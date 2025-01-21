@@ -57,6 +57,7 @@ bool isvalid(int x,int y){
     if(vis[x][y] || Graph[x][y] == '#')return false;
     return true;
 }
+
 void DFS(int i,int j){
     vis[i][j] = true;
     if(isvalid(i-1,j))
