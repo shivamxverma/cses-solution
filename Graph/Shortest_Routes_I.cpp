@@ -1,93 +1,60 @@
 #include <bits/stdc++.h>
-#include <unordered_set>
 using namespace std;
 
-#define int long long
-#define all(v) (v).begin(), (v).end()
-#define rall(v) (v).rbegin(), (v).rend()
-#define vi vector<int>
-typedef pair<int, int> pi;
-#define setbits(x) __builtin_popcountll(x)
-#define binary_rep(x) bitset<sizeof(10) * 8> binary_rep(x)
-const int M = 1000000007;
-#define endl "\n"
-#define sum(a) (accumulate((a).begin(), (a).end(), 0LL))
-#define unique_el(s) \
-    sort(all(s));    \
-    s.erase(unique(s.begin(), s.end()), s.end())
-#define minel(a) (*min_element((a).begin(), (a).end()))
-#define maxel(a) (*max_element((a).begin(), (a).end()))
-#define mini(a) (min_element((a).begin(), (a).end()) - (a).begin())
-#define maxi(a) (max_element((a).begin(), (a).end()) - (a).begin())
-#define cnt(a, x) (count((a).begin(), (a).end(), (x)))
-#define lob(a, x) (lower_bound((a).begin(), (a).end(), (x)) - (a).begin())
-#define upb(a, x) (upper_bound((a).begin(), (a).end(), (x)) - (a).begin())
-#define pb push_back
-#define mp make_pair
-#define rep(i, a, b) for (int i = a; i < b; i++)
-#define Rep(i, b) for (int i = 0; i < b; i++)
-#define repr(i, a, b) for (int i = a; i >= b; i--)
-#define printyes cout << "YES" << "\n"
-#define printno cout << "NO" << "\n"
-long long inf = LLONG_MAX;
-int n = 100001, m = 200001;
-vector<unordered_map<int, int>> graph(n);
+const int INF = 1e9;  // Large number representing infinity
+int n, m;
+vector<vector<pair<int, int>>> graph;  // Adjacency list
+vector<int> dist;  // Stores shortest distance from source
 
-vector<int> dist(n, inf);
+void adj(int n, int m) {
+    graph.assign(n, vector<pair<int, int>>()); // Initialize graph
+    for (int i = 0; i < m; i++) {
+        int u, v, l;
+        cin >> u >> v >> l;
+        u--, v--;  // Convert 1-based input to 0-based
+        graph[u].push_back({v, l});
+        graph[v].push_back({u, l});
+    }
+}
 
-void dijktra(int s)
-{
-    dist[s] = 0;
-    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> q;
-    q.push({0, s});
-    while (!q.empty())
-    {
-        auto node = q.top();
-        q.pop();
-        int nodex = node.second;
-        int wt = node.first;
-        if (wt != dist[nodex])
-            continue;
-        for (auto i : graph[nodex])
-        {
-            int ff = i.first;
-            int ss = i.second;
-            if (dist[ff] > (ss + dist[nodex]))
-            {
-                dist[ff] = ss + dist[nodex];
-                q.push({dist[ff], ff});
+void dijkstra(int source) {
+    dist.assign(n, INF); // Set all distances to INF
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+
+    dist[source] = 0;
+    pq.push({0, source}); // Push source node with distance 0
+
+    while (!pq.empty()) {
+        auto [d, edge] = pq.top();
+        pq.pop();
+
+        if (d > dist[edge]) continue; // Ignore outdated entries
+
+        for (auto [next, weight] : graph[edge]) {
+            int newDist = dist[edge] + weight;
+            if (newDist < dist[next]) {
+                dist[next] = newDist;
+                pq.push({newDist, next});
             }
         }
     }
 }
-void solve()
-{
+
+void MahavirCoder() {
     cin >> n >> m;
-    for (int i = 0; i < m; i++) {
-        int u, v, w;
-        cin >> u >> v >> w;
-        u--, v--;  
+    adj(n, m);  // Initialize the graph
 
-        if (graph[u].count(v)) {
-            graph[u][v] = min(graph[u][v], w);
-        } else {
-            graph[u][v] = w; 
-        }
-    }
+    dijkstra(0);  // Run Dijkstra from node 0 (1st node in input)
 
-    dijktra(0);
-    for (int d = 0; d < n; d++)
-    {
-        cout << dist[d] << " ";
+    for (int d : dist) {
+        cout << (d == INF ? -1 : d) << " ";  // Print -1 for unreachable nodes
     }
     cout << endl;
 }
-signed main()
-{
-    int t = 1;
-    // cin>>t;
-    while (t--)
-    {
-        solve();
-    }
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    MahavirCoder();
+    return 0;
 }
