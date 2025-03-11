@@ -1,11 +1,13 @@
 #include<bits/stdc++.h>
 using namespace std;
+#define int long long int
 
 bool cmp(pair<int,int> a,pair<int,int> b){
+  if(a.first == b.first)return a.second<b.second;
   return a.first < b.first;
 }
 
-int main(){
+signed main(){
     int n;cin>>n;
     vector<pair<int,int>> a(n);
     for(int i=0 ; i<n ; i++){
@@ -13,15 +15,19 @@ int main(){
       cin>> a[i].second;
     }
     sort(a.begin(),a.end(),cmp);
-    int ans = 1;
-    for(int i=0 ; i<n ; i++){
-      int x = a[i].first,y = a[i].second;
-      auto it = upper_bound(a.begin(), a.end(), make_pair(y, INT_MAX), cmp);
-      it--;
-      int ind = (it == a.end())?n-1:it - a.begin();
-      ans = max(ans,(n-ind));
-      cout << x << " " << y << "      ";
-      cout << it->first << " " <<it->second << "   " << ind - i + 1 << endl;
+    int ans = 1,curr = 1,minprev = INT_MAX;
+    for(int i=0 ; i<n-1 ; i++){
+      auto [xx, yy] = a[i];
+      minprev = min(minprev,yy);
+      int j = i;
+      if(minprev>a[i+1].first){
+         curr++;
+      } else {
+        curr = 1;
+        minprev = yy;
+      }
+       
+      ans = max(ans,curr);
     }
     cout << ans << endl;
 }
