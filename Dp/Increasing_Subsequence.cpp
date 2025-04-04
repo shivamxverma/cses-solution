@@ -3,17 +3,24 @@
 
 #include<bits/stdc++.h>
 using namespace std;
+#define int long long int
 
-int solve(int n,vector<int> &v,int prev,vector<int> &dp){
-    if(n==0){
-      return (prev>=v[0]);
+int lengthOfLIS(vector<int>& nums) {
+    int n = nums.size();
+    vector<vector<int>> dp(n + 1, vector<int>(n + 1, 0));
+
+    for (int i = n - 1; i >= 0; i--) {
+        for (int prevIdx = i - 1; prevIdx >= -1; prevIdx--) {
+            int take = 0;
+            if (prevIdx == -1 || nums[i] > nums[prevIdx]) {
+                take = 1 + dp[i + 1][i + 1 - (prevIdx == -1 ? 0 : 1)];
+            }
+            int notTake = dp[i + 1][prevIdx + 1];
+
+            dp[i][prevIdx + 1] = max(take, notTake);
+        }
     }
-    if(dp[n]!=-1)return dp[n];
-    int take = 0,nottake = 0;
-    if(prev>=v[n])take = 1 + solve(n-1,v,v[n],dp);
-    nottake = solve(n-1,v,prev,dp);
-
-    return dp[n] = max(take , nottake);
+    return dp[0][0];
 }
 
 void MahavirCoder(){
@@ -22,17 +29,10 @@ void MahavirCoder(){
   for(int i=0 ; i<n ; i++){
     cin>>v[i];
   }
-  vector<int> dp(n+1,-1);
-
-  cout <<  solve(n-1,v,INT_MAX,dp) << endl;
-
-  cout << dp[n-1] << endl;
-
-  for(auto x : dp)cout << x <<  " ";
-  cout << endl;
+  cout << lengthOfLIS(v);
 }
 
-int main(){
+signed main(){
     int t = 1;
     while(t--){
         MahavirCoder();

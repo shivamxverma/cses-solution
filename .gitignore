@@ -2,3 +2,4 @@
 *.exe
 **/.vscode/
 **/.cph/
+../.DS_Store
