@@ -1,40 +1,35 @@
 #include <bits/stdc++.h>
+#include <unordered_map>
 using namespace std;
 
-const int INF = 1e9;  // Large number representing infinity
+// Common Definitions
+#define int long long int
+#define pb push_back
+#define mp make_pair
+#define endl "\n"
+typedef pair<int, int> pi;
+const int INF = 1e18;
+
 int n, m;
-vector<vector<pair<int, int>>> graph;  // Adjacency list
-vector<int> dist;  // Stores shortest distance from source
+vector<unordered_map<int, int>> graph;
+vector<bool> mark;      
+vector<int> dist; 
 
-void adj(int n, int m) {
-    graph.assign(n, vector<pair<int, int>>()); // Initialize graph
-    for (int i = 0; i < m; i++) {
-        int u, v, l;
-        cin >> u >> v >> l;
-        u--, v--;  // Convert 1-based input to 0-based
-        graph[u].push_back({v, l});
-        graph[v].push_back({u, l});
-    }
-}
-
-void dijkstra(int source) {
-    dist.assign(n, INF); // Set all distances to INF
+void solve() {
+    vector<bool> vis(n, false);
     priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-
-    dist[source] = 0;
-    pq.push({0, source}); // Push source node with distance 0
-
+    dist[0] = 0; 
+    pq.push({0,0});
     while (!pq.empty()) {
-        auto [d, edge] = pq.top();
+        auto [nn,dd] = pq.top(); 
         pq.pop();
-
-        if (d > dist[edge]) continue; // Ignore outdated entries
-
-        for (auto [next, weight] : graph[edge]) {
-            int newDist = dist[edge] + weight;
-            if (newDist < dist[next]) {
-                dist[next] = newDist;
-                pq.push({newDist, next});
+        if(dd != dist[nn])continue;
+        vis[nn] = true;
+        for (auto [v, w] : graph[nn]) {
+            int ddd = dist[nn] + w;
+            if (ddd < dist[v]) {
+                dist[v] = ddd;
+                pq.push({v,dist[v]});
             }
         }
     }
@@ -42,19 +37,29 @@ void dijkstra(int source) {
 
 void MahavirCoder() {
     cin >> n >> m;
-    adj(n, m);  // Initialize the graph
+    graph.resize(n);
+    mark.resize(n, false);
+    dist.resize(n, INF);
+    for (int i = 0; i < m; i++) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        u--, v--;  
+ 
+        if (graph[u].count(v)) {
+            graph[u][v] = min((int)graph[u][v], (int)w);
+        } else {
+            graph[u][v] = w; 
+        }
+    }
 
-    dijkstra(0);  // Run Dijkstra from node 0 (1st node in input)
-
-    for (int d : dist) {
-        cout << (d == INF ? -1 : d) << " ";  // Print -1 for unreachable nodes
+    solve();
+    for(auto it : dist){
+        cout << it << " ";
     }
     cout << endl;
 }
 
-int main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
+signed main() {
     MahavirCoder();
     return 0;
 }
