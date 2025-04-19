@@ -1,74 +1,73 @@
 #include <bits/stdc++.h>
 using namespace std;
+#define int long long
+#define INF 1e18
 
-// Common Definitions
-#define ll long long int
-#define pb push_back
-#define mp make_pair
-#define endl "\n"
-typedef pair<int, int> pi;
-const ll INF = 1e18; // Use long long to avoid overflow
+vector<int> helper(int src,int n,vector<vector<pair<int,int>>> &adj){
+    vector<int> dist(n+1,INF);
 
-// Global Variables
-int n, m;
-vector<vector<pi>> graph; // Adjacency list: {vertex, weight}
-vector<bool> mark;        // Visited array
-vector<ll> dist;          // Distance array (long long for safety)
+    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>>pq;
 
-vector<vector<pi>> adj(int n, int m) {
-    vector<vector<pi>> graph(n);
-    for (int i = 0; i < m; i++) {
-        int u, v, l;
-        cin >> u >> v >> l; // Input: u -> v with weight l
-        u--, v--;           // Convert to 0-based indexing
-        graph[u].emplace_back(v, l);
-    }
-    return graph;
-}
+    dist[src] = 0;
 
-void solve() {
-    vector<bool> vis(n, false);
-    // Priority queue: {distance, vertex, max_distance_so_far}
-    priority_queue<tuple<ll, int, ll>, vector<tuple<ll, int, ll>>, greater<>> pq;
+    pq.push({0,src});
 
-    dist[0] = 0; // Starting node
-    pq.push({0, 0, 0}); // {distance, vertex, max_distance_so_far}
-
-    while (!pq.empty()) {
-        auto [d, u, m] = pq.top(); // d: current distance, u: vertex, m: max distance so far
+    while(!pq.empty()){
+        auto node = pq.top();
         pq.pop();
 
-        if (vis[u]) continue; // Skip if already visited
-        vis[u] = true;
+        int nn = node.second;
+        int wt = node.first;
 
-        for (auto [v, w] : graph[u]) {
-            // Calculate new max distance considering the path to u
-            ll new_m = max(m, dist[u]);
-            // Custom cost: dist[u] - new_m + (new_m / 2) + w
-            ll cost = dist[u] - new_m + (new_m / 2) + w;
+        if(dist[nn] < wt)continue;
 
-            if (cost < dist[v]) {
-                dist[v] = cost;
-                pq.push({dist[v], v, new_m});
+        for(auto edge : adj[nn]){
+            int to = edge.first;
+            int cost = edge.second;
+            int xx = cost + dist[nn];
+
+            if(xx < dist[to]){
+                dist[to] = xx;
+                pq.push({dist[to],to});
             }
         }
     }
+    return dist;
 }
 
-void MahavirCoder() {
-    cin >> n >> m;
-    if (n <= 0 || m < 0) return;
+void solve() {
 
-    mark.resize(n, false);
-    dist.resize(n, INF);
-    graph = adj(n, m);
+    int n,m;cin>>n>>m;
+
+    vector<vector<pair<int,int>>> adj(n+1),adj_Rev(n+1);
+
+    for(int i=0 ; i<m ; i++){
+        int u,v,w;cin>>u>>v>>w;
+        adj[u].push_back({v,w});
+        adj_Rev[v].push_back({u,w});
+    }
+
+    vector<int> d = helper(1,n,adj);
+    vector<int> d_ = helper(n,n,adj_Rev);
+
+    int ans = INF;
+
+    for(int i=1 ; i<=n ; i++){
+        for(auto nn : adj[i]){
+            int to = nn.first;
+            int c = nn.second;
+            if(d[i] == INF || d_[to] == INF)continue;
+            
+            ans = min(ans, d[i] + c/2 + d_[to]);
+        }
+    }
+
+    cout << ans << endl;
+
+}
+
+signed main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
     solve();
-
-    if (dist[n - 1] == INF) cout << "INF" << endl;
-    else cout << dist[n - 1] << endl;
-}
-
-int main() {
-    MahavirCoder();
-    return 0;
 }
