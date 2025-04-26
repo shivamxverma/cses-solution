@@ -11,7 +11,7 @@ void solve() {
     for (int i = 0; i < m; i++) {
         int u, v, w; cin >> u >> v >> w;
         adj[u].push_back({v, w});
-        adj[v].push_back({u, w});
+        // adj[v].push_back({u, w});
     }
 
     vector<vector<int>> dist(n + 1);
