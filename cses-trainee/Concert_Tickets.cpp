@@ -4,35 +4,43 @@
 using namespace std;
 
 void MahavirCoder(){
-    int n,m;
-    vector<long long> person;
+    int n,m; cin>>n>>m;
     multiset<int> tickets;
-    cin >> n >> m;
-    
-    person.resize(m);
+
     for(int i=0 ; i<n ; i++){
         int x;cin>>x;
         tickets.insert(x);
-    };
-    for(int i=0 ; i<m ; i++)cin>>person[i];
+        // cout << x << endl;
+    }
 
     for(int i=0 ; i<m ; i++){
-        int per = person[i];
-        auto it = tickets.lower_bound(per);
-        if(it != tickets.begin()){
-            if(*it == per){
-                tickets.erase(it);
-                cout << per << endl;
-            } else {
-                int ele = *(--it);
-                cout << ele << endl;
-                tickets.erase(ele);
-            }
-        } else {
-            if(*it<=per){
+        int x;cin>>x;
+        // cout << x << endl;
+        auto it = tickets.lower_bound(x);
+
+        // cout << *it << endl;
+        if(tickets.size() == 0){
+            cout << -1 << endl;
+        }
+        else if(it == tickets.begin()){
+            if(*it > x)cout << -1 << endl;
+            else {
                 cout << (*it) << endl;
                 tickets.erase(it);
-            }else cout << -1 << endl;
+            }
+        } else {
+            if(it == tickets.end()){
+                cout << *(--it) << endl;
+                tickets.erase(it);
+            } else {
+                if(*it == x){
+                    cout << x << endl;
+                    tickets.erase(it);
+                } else {
+                    cout << *(--it) << endl;
+                    tickets.erase(it);
+                } 
+            }
         }
     }
 }
