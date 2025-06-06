@@ -18,8 +18,15 @@ void MahavirCoder(){
     }
 
     sort(entry.begin(),entry.end(),cmp);
-    
-    
+
+    int ans = 0,cur = 1;
+
+    for(int i=1 ; i<n ; i++){
+        if(entry[i].first >= entry[i-1].second){
+            cur++;
+        } 
+    } 
+    cout << cur << endl;
 }
 
 int main(){
