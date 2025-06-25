@@ -40,18 +40,32 @@ const int N = 1e5;
 #define lob(a, x) (lower_bound((a).begin(), (a).end(), (x)) - (a).begin())
 #define upb(a, x) (upper_bound((a).begin(), (a).end(), (x)) - (a).begin())
 
-ll solve(int n){
-    if(n==0)return 1;
-    ll ans = 0;
-    for(int d = 1 ; d<=6 ; d++){
-        if(n-d >= 0)ans+=solve(n-d);
-    }
-    return ans;
-}
+// Recursive Dp Code
+
+// int solve(int n,vc &dp){
+//     if(n == 0)return 1;
+//     if(dp[n]!=-1)return dp[n];
+//     ll ans = 0;
+//     sloop(i,1,7){
+//         if(n-i>=0)ans = (ans + solve(n-i,dp))%mod;
+//     }
+//     return dp[n] = ans;
+// }
 
 void MahavirCoder() {
     int n;cin>>n;
-    cout << solve(n) << endl;
+    vc dp(n+1,-1);
+    
+    dp[0] = 1;
+
+    sloop(i,1,n+1){
+        dp[i] = 0;
+        sloop(j,1,7){
+            if(i-j>=0)dp[i] = (dp[i] + dp[i-j])%mod;
+        }
+    }
+
+    cout << dp[n] << endl;
 }
 
 int main()

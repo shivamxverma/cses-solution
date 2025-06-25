@@ -4,8 +4,9 @@
 using namespace std;
 
 bool cmp(pair<int,int> &a,pair<int,int> &b){
-    if(a.first == b.first) return a.second < b.second;
-    return a.first < b.first;
+    // if(a.second == b.second) return a.first < b.first;
+
+    return a.second < b.second;
 }
 
 void MahavirCoder(){
@@ -19,11 +20,12 @@ void MahavirCoder(){
 
     sort(entry.begin(),entry.end(),cmp);
 
-    int ans = 0,cur = 1;
+    int ans = 0,cur = 1,prev = entry[0].second;
 
     for(int i=1 ; i<n ; i++){
-        if(entry[i].first >= entry[i-1].second){
+        if(entry[i].first >= prev){
             cur++;
+            prev = entry[i].second;
         } 
     } 
     cout << cur << endl;

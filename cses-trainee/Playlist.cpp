@@ -11,24 +11,16 @@ void MahavirCoder(){
     }
 
     map<int,int> memory;
-    int ans = 0;
-    int cur = 0;
     int prev = 0;
+    int ans = 0;
+    
     
     for(int i=0 ; i<n ; i++){
-        if(memory.find(a[i])==memory.end()){
-            cur++;
-        } else {
-            if(prev>memory[a[i]]){
-                cur++;
-            }
-            else {
-                cur = i-memory[a[i]];
-                prev = i;
-            }
+        if(memory[a[i]]>0){
+            prev = max(prev,memory[a[i]]);
         }
-        memory[a[i]] = i;
-        ans = max(ans,cur);
+        ans = max(ans,i+1-prev);
+        memory[a[i]] = i+1;
     }
     
     cout << ans << endl;

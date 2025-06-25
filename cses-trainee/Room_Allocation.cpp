@@ -5,6 +5,7 @@
 #include<unordered_map>
 #include<unordered_set>
 using namespace std;
+
  
 // some common Defination
 
@@ -21,9 +22,9 @@ const int N = 1e5;
 #define mp make_pair
 #define f first
 #define s second
-#define loop(i,a,b) for (int i = a; i < b; i++)
-#define Loop(i,b) for (int i = 0; i < b; i++)
-#define Rloop(i,a,b) for (int i = a; i >= b; i--)
+#define sloop(i,a,b) for (int i = a; i < b; i++)
+#define loop(i,b) for (int i = 0; i < b; i++)
+#define rloop(i,a,b) for (int i = a; i >= b; i--)
 #define print(str) cout << str << "\n"
 
 // Inbuilt Function
@@ -38,39 +39,6 @@ const int N = 1e5;
 #define lob(a, x) (lower_bound((a).begin(), (a).end(), (x)) - (a).begin())
 #define upb(a, x) (upper_bound((a).begin(), (a).end(), (x)) - (a).begin())
 
-// Bit Manupulatoin operations 
-
-#define bits(x) __builtin_popcount(x)
-#define bitsll(x) __builtin_popcountll(x)
-#define msb(x) (31 - __builtin_clz(x))
-#define msbll(x) (63 - __builtin_clzll(x))
-#define lsb(x) __builtin_ctz(x)
-#define lsbll(x) __builtin_ctzll(x)
-
-bool check_bit(int x ,int k){return x&(1<<k);}
-int set_bit(int x,int k){return x|(1<<k);}
-int Unset_bit(int x,int k){return x&(~(1<<k));}
-int flip_bit(int x,int k){return x^(1<<k);}
-
-// xor from 1 to N
-
-int XOR1ToN(int n) {
-    if (n % 4 == 0) return n;
-    if (n % 4 == 1) return 1;
-    if (n % 4 == 2) return n + 1;
-    return 0;
-}
-
-// count the bits
-
-int countSetBits(int n) {
-    int count = 0;
-    while (n) {
-        count += (n & 1);
-        n >>= 1;
-    }
-    return count;
-}
 
 // Debug
 
@@ -87,48 +55,39 @@ template <class T, class V> void _print(unordered_map <T, V> v) {cerr << "[ "; f
 template <class T> void _print(set <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
 template <class T> void _print(unordered_set <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
 template <class T> void _print(multiset <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
-template <class T> void _print(unordered_multiset <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
- 
-// input array
+template <class T> void _print(unordered_multiset <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";} 
 
-template <class T> istream & operator>> (istream &in, vector<T> &v) {
-    for (auto &vl : v) { in >> vl;} return in; }
-template <typename T> void pvec(vector<T>&v) {
-    for(auto i : v) {cout << i << " ";} cout << endl;}
-
-// output array    
-
-template <typename T>
-ostream& operator<<(ostream &out, const vector<T>& v) {
-    for (const auto &i : v) {
-        out << i << " ";
-    }
-    return out;
+bool cmp(pair<int,pair<int,int>> &a , pair<int,pair<int,int>> &b){
+    if(a.first == b.first)return a.s.f < b.s.f;
+    return a.f < b.f;
 }
 
-// Prefix sum 
-
-template <typename T>
-void prefixSum(const vector<T>& arr, vector<T>& prefix) {
-    int n = arr.size();
-    prefix.resize(n);
-    prefix[0] = arr[0];
-    for (int i = 1; i < n; i++) {
-        prefix[i] = prefix[i - 1] + arr[i];
+void MahavirCoder() {
+    int n;cin>>n;
+    vector<pair<int,pair<int,int>>> vp(n);
+    loop(i,n){
+        int x,y;cin>>x>>y;
+        vp[i] = {x,{y,i}};  
     }
-}
- 
 
+    sort(all(vp)); 
 
-void shivamv_99(){
-  int n;cin>>n;
-  vc v(n);cin>>v;
-	cout << v << endl;
-}
-int main(){
-    int t = 1;
-    // cin>>t;
-    while(t--){
-        shivamv_99();
+    int room = 0;
+
+    int prev = vp[0].s.f;
+
+    sloop(i,1,n){
+        if(vp[i].f > prev){
+            
+        }
     }
+    
+    // shivam(vp);
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    MahavirCoder();
+    return 0;
 }

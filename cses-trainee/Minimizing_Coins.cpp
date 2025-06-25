@@ -87,31 +87,42 @@ void prefixSum(const vector<T> &arr, vector<T> &prefix)
     }
 }
 
-ll solve(int n, vc v, ll target, vector<vector<ll>> &dp) {
-    if (target == 0) return 0;
-    if (n < 0) return INF;
+// ll solve(vc &a, int k, vc &dp) {
 
-    if (dp[n][target] != -1) return dp[n][target];
+//     if (k == 0) return 0;
+//     if (dp[k] != -1) return dp[k];
 
-    ll take = INF;
-    ll nottake = INF;
+//     ll mn = INT_MAX;
 
-    if (target >= v[n]) take = 1 + solve(n - 1, v, target - v[n], dp);
+//     loop(i, a.size()) {
+//         if (a[i] <= k) {
+//             mn = min(mn, 1 + solve(a, k - a[i], dp));
+//         }
+//     }
 
-    nottake = solve(n - 1, v, target, dp);
+//     return dp[k] = mn;
+// }
 
-    return dp[n][target] = min(nottake, take);
-}
 
 void MahavirCoder() {
     ll n, k;
     cin >> n >> k;
     vc v(n);
     cin >> v;
+    vc dp(k + 1, -1);
 
-    vector<vector<ll>> dp(n, vector<ll>(k + 1, -1));
-    ll result = solve(n - 1, v, k, dp);
-    cout << (result >= INF ? -1 : result) << endl;
+    dp[0] = 0;
+
+    sloop(i,1,k+1){
+        ll mn = INT_MAX;
+        sloop(j,0,n){
+            if(v[j] <= i) mn = min(mn, 1 + dp[i - v[j]]);
+        }
+        dp[i] = mn;
+    }
+    ll ans = dp[k];
+    if (ans == INT_MAX) cout << -1 << endl;
+    else cout << ans << endl;
 }
 
 

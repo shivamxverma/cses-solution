@@ -2,6 +2,8 @@
 // Shivam Verma
 
 #include <bits/stdc++.h>
+#include <unordered_set>
+#include <unordered_map>
 using namespace std;
 
 // Common definitions
@@ -29,21 +31,29 @@ ostream &operator<<(ostream &out, const vector<T> &v)
 
 
 void MahavirCoder() {
-    int n; cin >> n;
-    vc a(n); cin >> a;
+    int n,k;cin>>n>>k;
 
-    stack<pair<ll, int>> st;
-    loop(i, n) {
-        while (!st.empty() && st.top().first >= a[i]) {
-            st.pop();
-        }
-        if (st.empty()) {
-            cout << 0 << " ";
-        } else {
-            cout << st.top().second + 1 << " ";
-        }
-        st.push({a[i], i});
+    vc v(n);cin>>v;
+    unordered_map<ll,ll> track;
+
+    loop(i,k){
+        track[v[i]]++;
     }
+
+    vc ans;
+    ans.push_back(track.size());
+
+    for(int i=k ; i<n ; i++){
+        track[v[i]]++;
+        track[v[i-k]]--;
+        if(track[v[i-k]]==0){
+            track.erase(v[i-k]);
+        }
+        ans.push_back(track.size());
+    }
+
+    for(auto i : ans)cout << i << " ";
+    cout << endl;
 }
 
 int main() {
