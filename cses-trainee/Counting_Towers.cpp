@@ -4,6 +4,9 @@
 #include <bits/stdc++.h>
 #include <unordered_map>
 #include <unordered_set>
+#include <iostream>
+#include <set>
+#include <map>
 using namespace std;
 
 // some common Defination
@@ -15,7 +18,7 @@ const long long INF = LLONG_MAX;
 #define vc vector<ll>
 typedef pair<int, int> pi;
 const int mod = 1000000007;
-const int N = 1e5;
+const int N = 1e6+5;
 #define endl "\n"
 #define pb push_back
 #define mp make_pair
@@ -26,99 +29,24 @@ const int N = 1e5;
 #define rloop(i, a, b) for (int i = a; i >= b; i--)
 #define print(str) cout << str << "\n"
 
-// Inbuilt Function
-
-#define sum(a) (accumulate((a).begin(), (a).end(), 0LL))
-#define unique_el(s) \
-    sort(all(s));    \
-    s.erase(unique(s.begin(), s.end()), s.end())
-#define minel(a) (*min_element((a).begin(), (a).end()))
-#define maxel(a) (*max_element((a).begin(), (a).end()))
-#define mini(a) (min_element((a).begin(), (a).end()) - (a).begin())
-#define maxi(a) (max_element((a).begin(), (a).end()) - (a).begin())
-#define cnt(a, x) (count((a).begin(), (a).end(), (x)))
-#define lob(a, x) (lower_bound((a).begin(), (a).end(), (x)) - (a).begin())
-#define upb(a, x) (upper_bound((a).begin(), (a).end(), (x)) - (a).begin())
-
-
-#ifndef ONLINE_JUDGE
-#define shivam(x) cerr << #x <<" "; _print(x); cerr << endl;
-#else
-#define shivam(x)
-#endif
-template <class T> void _print(T t){cerr<<t;}
-template <class T, class V> void _print(pair <T, V> p) {cerr << "{"; _print(p.first); cerr << ","; _print(p.second); cerr << "}";}
-template <class T> void _print(vector <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
-template <class T, class V> void _print(map <T, V> v) {cerr << "[ "; for (auto i : v) {_print(i); cerr << " ";} cerr << "]";}
-template <class T, class V> void _print(unordered_map <T, V> v) {cerr << "[ "; for (auto i : v) {_print(i); cerr << " ";} cerr << "]";}
-template <class T> void _print(set <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
-template <class T> void _print(unordered_set <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
-template <class T> void _print(multiset <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
-template <class T> void _print(unordered_multiset <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
- 
-
-// input array
-
-template <class T>
-istream &operator>>(istream &in, vector<T> &v)
-{
-    for (auto &vl : v)
-    {
-        in >> vl;
-    }
-    return in;
-}
-template <typename T>
-void pvec(vector<T> &v)
-{
-    for (auto i : v)
-    {
-        cout << i << " ";
-    }
-    cout << endl;
-}
-
-// output array
-
-template <typename T>
-ostream &operator<<(ostream &out, const vector<T> &v)
-{
-    for (const auto &i : v)
-    {
-        out << i << " ";
-    }
-    return out;
-}
-
-// Prefix sum
-
-template <typename T>
-void prefixSum(const vector<T> &arr, vector<T> &prefix)
-{
-    int n = arr.size();
-    prefix.resize(n);
-    prefix[0] = arr[0];
-    for (int i = 1; i < n; i++)
-    {
-        prefix[i] = prefix[i - 1] + arr[i];
-    }
-}
-
-void MahavirCoder() {
-    int n,m;cin>>n>>m;
-    vc a(n);cin>>a;
-    vector<vector<int>> dp(n+1,vector<int>(3,0));
-
-    
-}
-
+ll dp[N][2];
 
 int main()
 {
+
+    dp[1][0] = 1;
+    dp[1][1] = 1;
+
+    for (int i = 2; i <= N; i++) {
+        dp[i][1]=(2*(dp[i-1][1]%mod))%mod + (dp[i-1][0]%mod);
+		dp[i][0]=(dp[i-1][1]%mod)+(4*(dp[i-1][0]%mod))%mod;
+    }
+
     int t = 1;
     cin>>t;
     while (t--)
     {
-        MahavirCoder();
+        int n;cin>>n;
+		cout<<(dp[n][0]%mod+dp[n][1]%mod)%mod<<"\n";
     }
 }
