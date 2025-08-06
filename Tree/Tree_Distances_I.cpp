@@ -1,5 +1,11 @@
 #include<bits/stdc++.h>
+#include<unordered_set>
+#include<iostream>
+#include<map>
+#include<set>
 using namespace std;
+ 
+#define ll long long int;
 #define all(v) (v).begin(), (v).end()
 #define rall(v) (v).rbegin(), (v).rend()
 #define vi vector<int>
@@ -26,68 +32,79 @@ const int M = 1000000007;
 #define printno cout << "NO" << "\n" 
  
 #ifndef ONLINE_JUDGE
-#define debug(x) cout << #x <<" "; _print(x); cout << endl;
+#define debug(x) cerr << #x <<" "; _print(x); cerr << endl;
 #else
 #define debug(x)
 #endif
-template <class T> void _print(T t){cout<<t;}
-template <class T, class V> void _print(pair <T, V> p) {cout << "{"; _print(p.first); cout << ","; _print(p.second); cout << "}";}
-template <class T> void _print(vector <T> v) {for (T i : v) {_print(i); cout << " ";}}
-template <class T, class V> void _print(map <T, V> v) {cout << "[ "; for (auto i : v) {_print(i); cout << " ";} cout << "]";}
-template <class T, class V> void _print(unordered_map <T, V> v) {cout << "[ "; for (auto i : v) {_print(i); cout << " ";} cout << "]";}
-template <class T> void _print(set <T> v) {cout << "[ "; for (T i : v) {_print(i); cout << " ";} cout << "]";}
-template <class T> void _print(unordered_set <T> v) {cout << "[ "; for (T i : v) {_print(i); cout << " ";} cout << "]";}
-template <class T> void _print(multiset <T> v) {cout << "[ "; for (T i : v) {_print(i); cout << " ";} cout << "]";}
-template <class T> void _print(unordered_multiset <T> v) {cout << "[ "; for (T i : v) {_print(i); cout << " ";} cout << "]";}
+template <class T> void _print(T t){cerr<<t;}
+template <class T, class V> void _print(pair <T, V> p) {cerr << "{"; _print(p.first); cerr << ","; _print(p.second); cerr << "}";}
+template <class T> void _print(vector <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
+template <class T, class V> void _print(map <T, V> v) {cerr << "[ "; for (auto i : v) {_print(i); cerr << " ";} cerr << "]";}
+template <class T, class V> void _print(unordered_map <T, V> v) {cerr << "[ "; for (auto i : v) {_print(i); cerr << " ";} cerr << "]";}
+template <class T> void _print(set <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
+template <class T> void _print(unordered_set <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
+template <class T> void _print(multiset <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
+template <class T> void _print(unordered_multiset <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
  
 template <class T> istream & operator>> (istream &in, vector<T> &v) {
     for (auto &vl : v) { in >> vl;} return in; }
 template <typename T> void pvec(vector<T>&v) {
     for(auto i : v) {cout << i << " ";} cout << endl;}
 
+vector<vector<int>> tree;
+vector<bool> vis;
 vector<int> ans;
-int realnode = 0;
-int max_depth = -1;
-int max_depth1 = -1;
-int dfs(vector<vector<int>> &tree, int node, vector<bool> &vis, int depth) {
-    vis[node] = true;
-    if (depth > max_depth) {
-        max_depth = depth;
-        realnode = node;
-    }
-    for (auto i : tree[node]) {
-        if (!vis[i]) {
-            dfs(tree, i, vis, depth + 1);
+int diameter = 0;
+
+int dfs(int u,int p){
+
+    int mx1 = -1,mx2 = -1;
+    for(auto v : tree[u]){
+        if(v == p)continue;
+
+        int h = dfs(v,u);
+
+        if(h > mx1){
+            mx2 = mx1;
+            mx1 = h;
+        } else if(h > mx2){
+            mx2 = h;
         }
     }
-    return depth;
+
+    if(mx1!=-1 && mx2!=-1){
+        diameter = max(diameter,mx1+mx2+2);
+    } else if(mx1!=-1){
+        diameter = max(diameter,mx1+1);
+    }
+    return mx1+1;
 }
 
-int dfs1(vector<vector<int>> &tree, int node, vector<bool> &vis, int depth) {
-    vis[node] = true;
-    if (depth > max_depth1) {
-        max_depth1 = depth;
-    }
+int fdfs(int u){
+    vis[u] = true;
 
     int maxi = 0;
-    for (auto i : tree[node]) {
-        if (!vis[i]) {
-            dfs(tree, i, vis, depth + 1);
-        }
+
+    for(auto v : tree[u]){
+        if(vis[v])continue;
+        maxi = max(maxi,fdfs(v));
     }
-    return depth;
+
+    ans[u] = diameter - maxi;
+
+    return maxi+1;
 }
 
-int dfs2(vector<vector<int>> &tree,int node,vector<bool> &vis,int depth){
-    
-}
-
-void solve() {
+void solve()
+{
     int n;
     cin >> n;
+    tree.assign(n, vector<int>());
+    vis.resize(n,false);
+    ans.resize(n);
 
-    vector<vector<int>> tree(n);
-    for (int i = 0; i < n - 1; i++) {
+    for (int i = 0; i < n - 1; i++)
+    {
         int u, v;
         cin >> u >> v;
         u--, v--;
@@ -95,26 +112,16 @@ void solve() {
         tree[v].push_back(u);
     }
 
-    vector<bool> vis(n,false);
-    dfs(tree, 0, vis, 0);
-    vector<bool> vis1(n,false);
-    dfs1(tree,realnode,vis1,0);
-    int diameter = max_depth+max_depth1;
+    dfs(0, -1);
+    fdfs(0);
+    // cout << diameter << endl;
 
-    vector<int> ans(n+1,-1);
-    for(int i=0 ; i<n ; i++){
-        if(tree[i].size() == 1)ans[i+1] = diameter;
-        else ans[i+1] = diameter-1;
-    }
-    for(int i=1 ; i<=n ; i++){
-        cout << ans[i] << " ";
-    }
+    for(auto it : ans)cout << it << " ";
     cout << endl;
 }
 
-signed main(){
-    int t = 1;
-    while(t--){
-        solve();
-    }
+int main()
+{
+    solve();
+    return 0;
 }

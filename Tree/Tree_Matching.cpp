@@ -1,8 +1,11 @@
 #include<bits/stdc++.h>
 #include<unordered_set>
+#include<iostream>
+#include<map>
+#include<set>
 using namespace std;
  
-#define int long long
+#define ll long long int;
 #define all(v) (v).begin(), (v).end()
 #define rall(v) (v).rbegin(), (v).rend()
 #define vi vector<int>
@@ -48,31 +51,49 @@ template <class T> istream & operator>> (istream &in, vector<T> &v) {
 template <typename T> void pvec(vector<T>&v) {
     for(auto i : v) {cout << i << " ";} cout << endl;}
 
-void solve(){
+vector<vector<int>> tree;
+vector<bool> vis;
+vector<bool> solve;
+int ans = 0;
+
+void helper(int u){
+    vis[u] = true;
+
+    for(auto v : tree[u]){
+        if(vis[v]) continue;
+
+        helper(v);
+
+        if(!solve[v] && !solve[u]){
+            solve[v] = true;
+            solve[u] = true;
+            ans++;
+        }
+
+    }
+}
+
+void MahavirCoder(){
     int n;
     cin>>n;
-    vector<vector<int>> tree(n);
+    tree.resize(n);
+    vis.resize(n);
+    solve.resize(n);
     Rep(i,n-1){
         int u,v;cin>>u>>v;
         u--,v--;
         tree[u].pb(v);
         tree[v].pb(u);
     }
-    int maxi = 0;
-    int node = 0;
-    Rep(i,n){
-        if(tree[i].size() > maxi){
-            maxi = tree[i].size();
-            node = i;
-        }
-    }
-    debug(tree);
-    cout << maxi << " " << node <<  endl;
+    
+    helper(0);
+
+    cout << ans << endl;
 }
-signed main(){
+int main(){
     int t = 1;
     // cin>>t;
     while(t--){
-        solve();
+        MahavirCoder();
     }
 }
