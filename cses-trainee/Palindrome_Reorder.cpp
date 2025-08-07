@@ -353,42 +353,63 @@ void prefixSum(const vector<T>& arr, vector<T>& prefix) {
     }
 }
 
-vector<bool> vis;
-vector<vector<int>> tree;
-vector<int> depth;
- 
-void dfs(int u){
-	vis[u] = true;
-	depth[u] = 1;
-	for(auto v : tree[u]){
-		if(!vis[v]){
-			dfs(v);
-			depth[u] += depth[v];
-		}
-	}
-}
 
 void MahavirCoder(){
-  int n;cin>>n;
-  depth.resize(n,0);
-  tree.resize(n);
-  vis.resize(n,false);
-for(int i=0 ; i<n-1 ; i++){
-	int u,v;cin>>u>>v;
-	u--,v--;
-	tree[u].push_back(v);
-	tree[v].push_back(u); 
-  }
+    string s;cin>>s;
 
-  dfs(0);
+    // cout << s << endl;
+    int n = s.size();
+    string ans;
+    for(int i=0 ; i<n ; i++){
+        ans.push_back('*');
+    }
 
-  for(auto it : depth)cout << it << " ";
-  cout << endl;
+    // cout << ans << endl;
+    map<char,int> charcnt;
+
+    for(auto c : s){
+        charcnt[c]++;
+    }
+
+    // for(auto [x,y] : charcnt){
+    //     cout << x << " " << y << endl;
+    // }
+
+    int first = 0,last = n-1;
+    bool ok = true;
+    int odd = 0;
+    char oddchar = 0;
+
+    for(auto [ch,cnt] : charcnt){
+        if(cnt%2==1){
+            odd++;
+            oddchar = ch;
+        } else {
+            for(int i=0 ; i<cnt/2 ; i++){
+                ans[first++] = ch;
+                ans[last--] = ch;
+            }
+        }
+    }
+
+    if(odd == 1){
+        if(n%2==0){
+            cout << "NO SOLUTION\n";
+        } else {
+            for(int i=0 ; i<n ; i++){
+                if(ans[i] == '*')ans[i] = oddchar;
+            }
+            cout << ans << endl;
+        }
+    } else if(odd > 1){
+        cout << "NO SOLUTION\n";
+    } else {
+        cout << ans << endl;
+    }
 }
 
 int main(){
     int t = 1;
-    cin>>t;
     while(t--){
         MahavirCoder();
     }
