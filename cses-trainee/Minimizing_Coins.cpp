@@ -2,6 +2,7 @@
 // Shivam verma
 
 #include <bits/stdc++.h>
+#include<iostream>
 #include <unordered_map>
 #include <unordered_set>
 using namespace std;
@@ -87,42 +88,37 @@ void prefixSum(const vector<T> &arr, vector<T> &prefix)
     }
 }
 
-// ll solve(vc &a, int k, vc &dp) {
-
-//     if (k == 0) return 0;
-//     if (dp[k] != -1) return dp[k];
-
-//     ll mn = INT_MAX;
-
-//     loop(i, a.size()) {
-//         if (a[i] <= k) {
-//             mn = min(mn, 1 + solve(a, k - a[i], dp));
-//         }
-//     }
-
-//     return dp[k] = mn;
-// }
-
+int Solve(int target,vector<int> &a,vector<pair<int,int>> &dp){
+    if(target == 0)return 0;
+    if(dp[target].first != -1)return dp[target].first;
+    int mini = INT_MAX;
+    for(int i=0 ; i<a.size() ; i++){
+        if(a[i] <= target){
+            int res = Solve(target-a[i],a,dp);
+            if(res != -1) {
+                if(1 + res < mini) {
+                    mini = 1 + res;
+                    dp[target].second = i;
+                }
+            }
+        }
+    }
+    return dp[target].first = (mini == INT_MAX ? -1 : mini);
+}
 
 void MahavirCoder() {
     ll n, k;
     cin >> n >> k;
-    vc v(n);
-    cin >> v;
-    vc dp(k + 1, -1);
-
-    dp[0] = 0;
-
-    sloop(i,1,k+1){
-        ll mn = INT_MAX;
-        sloop(j,0,n){
-            if(v[j] <= i) mn = min(mn, 1 + dp[i - v[j]]);
-        }
-        dp[i] = mn;
+    vector<int> a(n);
+    for(int i=0 ; i<n ; i++){
+        cin>>a[i];
     }
-    ll ans = dp[k];
-    if (ans == INT_MAX) cout << -1 << endl;
-    else cout << ans << endl;
+    vector<pair<int,int>> dp(k+1,{-1,-1});
+    cout << Solve(k,a,dp) << endl;
+
+    for(int i = 0 ; i<k ; i++){
+        cout << dp[i].first << " " << dp[i].second << endl;
+    }
 }
 
 

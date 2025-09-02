@@ -24,48 +24,34 @@ const int N = 1e5;
 #define mp make_pair
 #define f first
 #define s second
-#define loop(i, a, b) for (int i = a; i < b; i++)
-#define Loop(i, b) for (int i = 0; i < b; i++)
-#define Rloop(i, a, b) for (int i = a; i >= b; i--)
+#define sloop(i, a, b) for (int i = a; i < b; i++)
+#define loop(i, b) for (int i = 0; i < b; i++)
+#define rloop(i, a, b) for (int i = a; i >= b; i--)
 #define print(str) cout << str << "\n"
-
-int dx[] = {0, 1};
-int dy[] = {1, 0};
 
 void MahavirCoder() {
     int n;
     cin >> n;
     vector<string> grid(n);
     for (int i = 0; i < n; i++) cin >> grid[i];
+    vector<vector<int>> dp(n+1,vector<int> (n+1));
+    vector<vector<string>> ans(n+1);
 
-    vector<vector<bool>> visited(n, vector<bool>(n, false));
-    priority_queue<pair<string, pair<int, int>>, vector<pair<string, pair<int, int>>>, greater<>> pq;
-
-    pq.push({string(1, grid[0][0]), {0, 0}});
-
-    while (!pq.empty()) {
-        auto [path, coord] = pq.top();
-        pq.pop();
-        int x = coord.first;
-        int y = coord.second;
-
-        if (visited[x][y]) continue;
-        visited[x][y] = true;
-
-        if (x == n - 1 && y == n - 1) {
-            cout << path << "\n";
-            return;
+    for(int i=0 ; i<n ; i++){
+        string temp = "";
+        for(int j=0 ; j<=i ; j++){
+            temp.push_back('*');
         }
+        ans[i].push_back(temp);
+    } 
 
-        for (int dir = 0; dir < 2; dir++) {
-            int nx = x + dx[dir];
-            int ny = y + dy[dir];
-
-            if (nx < n && ny < n && !visited[nx][ny]) {
-                pq.push({path + grid[nx][ny], {nx, ny}});
-            }
+    for(int i=0 ; i<n ; i++){
+        for(int j=0 ; j<n ; j++){
+            if(i == 0 && j == 0)ans[0][0] = grid[0][0];
+            if(i > 0)ans[max(i,j)];
         }
     }
+    
 }
 
 

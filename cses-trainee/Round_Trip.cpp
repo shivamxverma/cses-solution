@@ -9,19 +9,17 @@ vector<int> parent(N, -1);
 int n, m;
 int yes = -1;
 
-bool Solve(int u, int p){
+void Solve(int u, int p){
     vis[u] = true;
     for(auto v : adj[u]){
-        if(!vis[v]){
-            parent[v] = u;
-            if(Solve(v, u)) return true;
-        } else if(v != p){
-            yes = v;
-            parent[v] = u;
-            return true;
-        }
+       if(vis[v]){
+        if(u != p)yes = u+1;
+        
+        if(yes != -1)return ;
+       }
+       parent[v] = u;
+       Solve(v,u);
     }
-    return false;
 }
 
 int main(){
@@ -34,20 +32,20 @@ int main(){
         adj[v].push_back(u);
     }
 
-    bool cycle = false;
-    for(int i = 0; i < n; i++){
-        if(!vis[i]){
-            if(Solve(i, -1)){
-                cycle = true;
-                break;
-            }
-        }
+    Solve(0,-1);
+
+    if(yes == -1){
+        cout << "IMPOSSIBLE\n";
     }
 
     vector<int> path;
-
-    for(int i = parent[yes] ; parent[yes]!=yes ; i = parent[yes]){
-        cout << i << " ";
+    for (int i = yes; i != -1; i = parent[i]) {
+        path.push_back(i);
     }
+    path.push_back(yes);
+
+    reverse(path.begin(), path.end());
+    cout << path.size() << endl;
+    for(auto it : path)cout << it+1 << " ";
     cout << endl;
 }
