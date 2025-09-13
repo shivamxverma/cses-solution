@@ -1,51 +1,61 @@
-#include<bits/stdc++.h>
-#include<iostream>
+#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
 using namespace std;
 
+#define ll long long int
 
-int n,m;
+int n, m;
 vector<vector<int>> graph;
-vector<bool> vis;
 vector<int> parent;
+vector<bool> ok;
+vector<bool> vis;
 
 int start = -1;
 
-void Solve(int u,int p){
+void Solve(int u){
     vis[u] = true;
+    ok[u] = true;
     for(auto v : graph[u]){
-        if(v == p) continue;
-        if(vis[v]){
+        if(!vis[v]){
+            parent[v] = u;
+            Solve(v);
+            if(start != -1)return;
+        } else if(ok[v]){
             start = v;
             parent[v] = u;
-            return;
+            return ;
         }
-        parent[v] = u;
-        Solve(v, u);
-        if(start != -1) return; 
     }
+    ok[u] = false;
 }
 
-int main(){
+int main()
+{
+    
     cin >> n >> m;
     graph.resize(n);
+    parent.resize(n, -1);
     vis.resize(n,false);
-    
-    for(int i = 0; i < m; i++){
+    ok.resize(n,false);
+    for (int i = 0; i < m; i++)
+    {
         int u, v;
         cin >> u >> v;
-        u--, v--; 
+        u--, v--;
         graph[u].push_back(v);
-        graph[v].push_back(u);
     }
 
-    parent.resize(n, -1);
     for(int i=0 ; i<n ; i++){
-        if(!vis[i])Solve(i,-1);
+        if(!vis[i]){
+            Solve(i);
+        }
         if(start != -1)break;
     }
 
-    if(start == -1)cout << "IMPOSSIBLE\n";
-    else {
+    if(start == -1){
+        cout << "IMPOSSIBLE\n";
+    } else {
         vector<int> path;
         path.push_back(start+1);
 
@@ -60,5 +70,6 @@ int main(){
         cout << path.size() << endl;
         for(auto it : path) cout << it << " ";
         cout << endl;
+        // cout << "YES\n";
     }
 }

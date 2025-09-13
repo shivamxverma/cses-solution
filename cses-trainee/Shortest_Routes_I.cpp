@@ -51,7 +51,6 @@ int main()
         cin >> u >> v >> w;
         u--, v--;
         graph[u].push_back({v,w});
-        graph[v].push_back({u,w});
     }
 
     ShortestPath(0);
