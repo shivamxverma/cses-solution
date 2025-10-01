@@ -75,49 +75,52 @@ int flip_bit(int x,int k){return x^(1<<k);}
 
 
 template <class T> istream & operator>> (istream &in, vector<T> &v) {
-	for (auto &vl : v) { in >> vl;} return in; }
+    for (auto &vl : v) { in >> vl;} return in; }
 template <typename T> void pvec(vector<T>&v) {
-	for(auto i : v) {cout << i << " ";} cout << endl;}
+    for(auto i : v) {cout << i << " ";} cout << endl;}
 
 // output array    
 
 template <typename T>
 ostream& operator<<(ostream &out, const vector<T>& v) {
-	for (const auto &i : v) {
-		out << i << " ";
-	}
-	return out;
+    for (const auto &i : v) {
+        out << i << " ";
+    }
+    return out;
+}
+
+int dp[100100];
+
+int Solve(int x){
+
+    if(x == 0)return 0;
+
+    if(dp[x]!=-1)return dp[x];
+    int ans = 0;
+    for(int i = 0 ; (1<<i) <= x ; i++){
+        if(Solve(x-(1<<i)) == 0){
+            ans = 1;
+            break;
+        }
+    }
+
+    dp[x] = ans;
+    return ans;
 }
 
 void MahavirCoder(){
-	int n;cin>>n;
-	vector<int> v(n);
-	cin>>v;
-
-	sort(all(v));
-
-	int i = 0,j = n-1;
-	ll sum = 0;
-	ll ans = 0;
-
-	while(i < j){
-		if(sum+v[i] <= v[j]){
-			sum += v[i];
-			i++;
-		} else {
-			sum = v[i];
-			ans += 2*(1ll)*v[j];
-			j--;
-		}
-	}
-
-	cout << ans << endl;
+    int n;cin>>n;
+    memset(dp,-1,sizeof(dp));
+    for(int i=0 ; i<=n ; i++){
+        if(Solve(i))cout << "Win\n";
+        else cout << "Loose\n";
+    }
 }
 
 int main(){
-	int t = 1;
-	// cin>>t;
-	while(t--){
-		MahavirCoder();
-	}
+    int t = 1;
+    // cin>>t;
+    while(t--){
+        MahavirCoder();
+    }
 }

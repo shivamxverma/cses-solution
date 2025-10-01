@@ -75,49 +75,76 @@ int flip_bit(int x,int k){return x^(1<<k);}
 
 
 template <class T> istream & operator>> (istream &in, vector<T> &v) {
-	for (auto &vl : v) { in >> vl;} return in; }
+    for (auto &vl : v) { in >> vl;} return in; }
 template <typename T> void pvec(vector<T>&v) {
-	for(auto i : v) {cout << i << " ";} cout << endl;}
+    for(auto i : v) {cout << i << " ";} cout << endl;}
 
 // output array    
 
 template <typename T>
 ostream& operator<<(ostream &out, const vector<T>& v) {
-	for (const auto &i : v) {
-		out << i << " ";
-	}
-	return out;
+    for (const auto &i : v) {
+        out << i << " ";
+    }
+    return out;
 }
 
-void MahavirCoder(){
-	int n;cin>>n;
-	vector<int> v(n);
-	cin>>v;
-
-	sort(all(v));
-
-	int i = 0,j = n-1;
-	ll sum = 0;
-	ll ans = 0;
-
-	while(i < j){
-		if(sum+v[i] <= v[j]){
-			sum += v[i];
-			i++;
-		} else {
-			sum = v[i];
-			ans += 2*(1ll)*v[j];
-			j--;
-		}
-	}
-
-	cout << ans << endl;
-}
+int n,k,t;
 
 int main(){
-	int t = 1;
-	// cin>>t;
-	while(t--){
-		MahavirCoder();
-	}
+    cin>>n>>k>>t;
+    vector<vector<ll>> grid(k,vector<ll>(n));
+
+    loop(i,n){
+        loop(j,k){
+            cin>>grid[j][i];
+        }
+    }
+
+    loop(i,k){
+        ll orr = 0;
+        loop(j,n){
+            orr |= grid[i][j];
+            grid[i][j] |= orr;
+        }
+    }
+
+    while(t--){
+        int m;cin>>m;
+        int l = n+1;
+        int r = 0;
+        bool one = false;
+        bool two = false;
+        while(m--){
+            int reg;cin>>reg;
+            char dir;cin>>dir;
+            ll val;cin>>val;
+            int city;
+            vector<ll> temp = grid[reg-1];
+            if(dir == '>'){
+                one = true;
+                city = upb(temp,val);
+                if (city < n) city++; 
+                l = min(l, city);
+
+            } else {
+                two = true;
+                city = lob(temp,val);
+                if (city >= n) city = n; 
+                r = max(r, city);
+            }
+            
+        }
+        if(l < r){
+                cout << l << endl;
+        } else {
+            if(one&two == true){
+                cout << -1 << endl;
+            } else {
+                if(l<n+1)cout << l << endl;
+                else if(r > 0)cout << r << endl;
+                else cout << -1 << endl;
+            }
+        }
+    }
 }

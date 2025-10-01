@@ -75,49 +75,79 @@ int flip_bit(int x,int k){return x^(1<<k);}
 
 
 template <class T> istream & operator>> (istream &in, vector<T> &v) {
-	for (auto &vl : v) { in >> vl;} return in; }
+    for (auto &vl : v) { in >> vl;} return in; }
 template <typename T> void pvec(vector<T>&v) {
-	for(auto i : v) {cout << i << " ";} cout << endl;}
+    for(auto i : v) {cout << i << " ";} cout << endl;}
 
 // output array    
 
 template <typename T>
 ostream& operator<<(ostream &out, const vector<T>& v) {
-	for (const auto &i : v) {
-		out << i << " ";
-	}
-	return out;
+    for (const auto &i : v) {
+        out << i << " ";
+    }
+    return out;
 }
 
 void MahavirCoder(){
-	int n;cin>>n;
-	vector<int> v(n);
-	cin>>v;
+    int n,a,b;cin>>n>>a>>b;
 
-	sort(all(v));
+    vector<int> p1(n),p2(n);
+    if(a == 0 || b == 0){
+        if(a == 0 && b == 0){
+            cout << "YES\n";
+        for(int i=1 ; i <= n ; i++){
+            p1[i-1] = i;
+        }
 
-	int i = 0,j = n-1;
-	ll sum = 0;
-	ll ans = 0;
+        for(int i=1 ; i<=n ; i++){
+            p2[i-1] = i;
+        }
+        } else {
+            cout << "NO\n";
+            return;
+        }
+    } else {
+        if(a+b > n){
+            cout << "NO\n";
+            return; 
+        }
+        cout << "YES\n";
+        for(int i=1 ; i <= n ; i++){
+            p1[i-1] = i;
+        }
 
-	while(i < j){
-		if(sum+v[i] <= v[j]){
-			sum += v[i];
-			i++;
-		} else {
-			sum = v[i];
-			ans += 2*(1ll)*v[j];
-			j--;
-		}
-	}
+        int extra = n-a-b;
 
-	cout << ans << endl;
+        for(int i=1 ; i<=extra ; i++){
+            p2[i-1] = i;
+        }
+
+        for(int d = 1 ; d <= a ; d++){
+            p2[extra+d-1] = extra+d+1;
+        }
+
+        for(int d = 1 ; d <= b ; d++){
+            p2[extra+a+d-1] = p1[extra+d];
+        }
+    }
+
+    for(auto p : p1){
+        cout << p << " ";
+    }
+    cout << endl;
+
+    for(auto p : p2){
+        cout << p << " ";
+    }
+    cout << endl;
+
 }
 
 int main(){
-	int t = 1;
-	// cin>>t;
-	while(t--){
-		MahavirCoder();
-	}
+    int t = 1;
+    cin>>t;
+    while(t--){
+        MahavirCoder();
+    }
 }

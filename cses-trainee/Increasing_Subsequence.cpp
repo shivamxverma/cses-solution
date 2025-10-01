@@ -5,8 +5,8 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <iostream>
-#include <set>
 #include <map>
+#include <set>
 using namespace std;
 
 // some common Defination
@@ -29,35 +29,107 @@ const int N = 1e5;
 #define rloop(i, a, b) for (int i = a; i >= b; i--)
 #define print(str) cout << str << "\n"
 
-void MahavirCoder()
-{
-    int n;cin>>n;
-    vc a(n);
-    for(int i=0 ; i<n ; i++)cin>>a[i];
-    map<int,int> dp;
-    int ans = 1;
+// debug code
 
-    for(int i = 0 ; i<n ; i++){
-        auto it = dp.lower_bound(a[i]);
-        if(it != dp.begin()){
-            --it;
-            int count = (it->s)+1;
-            dp[a[i]] = count;
-            ans = max(ans,count);
+#ifndef ONLINE_JUDGE
+#define shivam(x) cerr << #x <<" "; _print(x); cerr << endl;
+#else
+#define shivam(x)
+#endif
+template <class T> void _print(T t){cerr<<t;}
+template <class T, class V> void _print(pair <T, V> p) {cerr << "{"; _print(p.first); cerr << ","; _print(p.second); cerr << "}";}
+template <class T> void _print(vector <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
+template <class T, class V> void _print(map <T, V> v) {cerr << "[ "; for (auto i : v) {_print(i); cerr << " ";} cerr << "]";}
+template <class T, class V> void _print(unordered_map <T, V> v) {cerr << "[ "; for (auto i : v) {_print(i); cerr << " ";} cerr << "]";}
+template <class T> void _print(set <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
+template <class T> void _print(unordered_set <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
+template <class T> void _print(multiset <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
+template <class T> void _print(unordered_multiset <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
+
+
+// Inbuilt Function
+
+#define sum(a) (accumulate((a).begin(), (a).end(), 0LL))
+#define unique_el(s) sort(all(s)) ; s.erase(unique(s.begin(), s.end()), s.end())
+#define minel(a) (*min_element((a).begin(), (a).end()))
+#define maxel(a) (*max_element((a).begin(), (a).end()))
+#define mini(a) (min_element((a).begin(), (a).end()) - (a).begin())
+#define maxi(a) (max_element((a).begin(), (a).end()) - (a).begin())
+#define cnt(a, x) (count((a).begin(), (a).end(), (x)))
+#define lob(a, x) (lower_bound((a).begin(), (a).end(), (x)) - (a).begin())
+#define upb(a, x) (upper_bound((a).begin(), (a).end(), (x)) - (a).begin())
+
+// Bit Manupulatoin operations 
+
+#define bits(x) __builtin_popcount(x)
+#define bitsll(x) __builtin_popcountll(x)
+#define msb(x) (31 - __builtin_clz(x))
+#define msbll(x) (63 - __builtin_clzll(x))
+#define lsb(x) __builtin_ctz(x)
+#define lsbll(x) __builtin_ctzll(x)
+
+bool check_bit(int x ,int k){return x&(1<<k);}
+int set_bit(int x,int k){return x|(1<<k);}
+int Unset_bit(int x,int k){return x&(~(1<<k));}
+int flip_bit(int x,int k){return x^(1<<k);}
+
+
+template <class T> istream & operator>> (istream &in, vector<T> &v) {
+    for (auto &vl : v) { in >> vl;} return in; }
+template <typename T> void pvec(vector<T>&v) {
+    for(auto i : v) {cout << i << " ";} cout << endl;}
+
+// output array    
+
+template <typename T>
+ostream& operator<<(ostream &out, const vector<T>& v) {
+    for (const auto &i : v) {
+        out << i << " ";
+    }
+    return out;
+}
+
+void MahavirCoder(){
+    int n;cin>>n;
+    vector<int> a(n);
+    cin>>a;
+
+    vector<int> lis;
+
+    vector<int> len;
+
+    for(int i=0 ; i<n ; i++){
+        if(lis.empty() || lis.back() < a[i]){
+            lis.push_back(a[i]);
+            len.push_back(lis.size());
         } else {
-            dp[a[i]] = 1;
+            auto it = lower_bound(all(lis),a[i]);
+            *it = a[i];
+            len.push_back(it-lis.begin()+1);
         }
     }
 
-    cout << ans << endl;
+    vector<int> final_lis;
+    int cur = lis.size();
+
+    for(int i=n-1 ; i>=0 ; i--){
+        if(len[i] == cur){
+            final_lis.push_back(a[i]);
+            cur--;
+        }
+    }
+
+    reverse(all(final_lis));
+
+    shivam(final_lis);
+
+    cout << lis.size() << endl;
 }
 
-int main()
-{
+int main(){
     int t = 1;
     // cin>>t;
-    while (t--)
-    {
+    while(t--){
         MahavirCoder();
     }
 }

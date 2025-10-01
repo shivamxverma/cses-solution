@@ -75,49 +75,56 @@ int flip_bit(int x,int k){return x^(1<<k);}
 
 
 template <class T> istream & operator>> (istream &in, vector<T> &v) {
-	for (auto &vl : v) { in >> vl;} return in; }
+    for (auto &vl : v) { in >> vl;} return in; }
 template <typename T> void pvec(vector<T>&v) {
-	for(auto i : v) {cout << i << " ";} cout << endl;}
+    for(auto i : v) {cout << i << " ";} cout << endl;}
 
 // output array    
 
 template <typename T>
 ostream& operator<<(ostream &out, const vector<T>& v) {
-	for (const auto &i : v) {
-		out << i << " ";
-	}
-	return out;
+    for (const auto &i : v) {
+        out << i << " ";
+    }
+    return out;
+}
+
+int grid[1001][1001];
+int dp[1001][1001];
+int done[1001][1001];
+
+int Solve(int n,int m){
+    // Pruning
+    if(n < 0 || m < 0)return -1e9;
+    if(n==0 && m==0)return grid[0][0];
+
+    if(done[n][m])return dp[n][m];
+
+    // Choices
+    int left = Solve(n-1,m);
+    int right = Solve(n,m-1);
+
+    dp[n][m] = grid[n][m] + max(left,right);
+    done[n][m] = 1;
+    return dp[n][m];
 }
 
 void MahavirCoder(){
-	int n;cin>>n;
-	vector<int> v(n);
-	cin>>v;
-
-	sort(all(v));
-
-	int i = 0,j = n-1;
-	ll sum = 0;
-	ll ans = 0;
-
-	while(i < j){
-		if(sum+v[i] <= v[j]){
-			sum += v[i];
-			i++;
-		} else {
-			sum = v[i];
-			ans += 2*(1ll)*v[j];
-			j--;
-		}
-	}
-
-	cout << ans << endl;
+    int n,m;cin>>n>>m;
+    memset(dp,-1,sizeof(dp));
+    loop(i,n){
+        loop(j,m){
+            cin>>grid[i][j];
+            done[i][j] = 0;
+        }
+    }
+    cout << Solve(n-1,m-1) << endl;
 }
 
 int main(){
-	int t = 1;
-	// cin>>t;
-	while(t--){
-		MahavirCoder();
-	}
+    int t = 1;
+    // cin>>t;
+    while(t--){
+        MahavirCoder();
+    }
 }

@@ -136,3 +136,58 @@ const int mod = 1000000007;
 
 //     cout << dp[n-1] << endl;
 // }
+
+struct State {
+    long long cost;
+    long long minEdge;
+    int node;
+    bool operator<(const State& other) const {
+        return cost > other.cost; 
+    }
+};
+
+class Solution {
+public:
+    int findMaxPathScore(vector<vector<int>>& edges, vector<bool>& online, long long k) { 
+        int n = online.size();
+        vector<vector<pair<int,long long>>> graph(n);
+
+        vector<int> indeg(n,0);
+
+        for(auto& ed : edges){
+            if(online[ed[0]] && online[ed[1]]){
+               graph[ed[0]].push_back({ed[1],ed[2]});
+               indeg[ed[1]]++;
+            }
+        }
+
+        vector<long long> Cost(n,INT_MAX);
+        vector<long long> dist(n,-1);
+        queue<int> pq;
+        
+        dist[0] = LLONG_MAX;
+        Cost[0] = 0;
+
+        for(int i=0 ; i<n ; i++){
+            if(indeg[i] == 0)pq.push(i);
+        }
+
+
+        while(!pq.empty()){
+            int u = pq.front();
+            pq.pop();
+
+            for(auto [v,w] : graph[u]){
+                indeg[v]--;
+                long long newCost = w+Cost[u];
+                if (newCost > k) continue;
+                long long newMinCost = min(dist[u],w);
+                dist[v] = newMinCost;
+                if(indeg[v] == 0)pq.push(v);
+            }
+        }
+
+        return dist[n-1];
+
+    }
+};

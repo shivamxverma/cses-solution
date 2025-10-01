@@ -1,49 +1,87 @@
+// Jai shree Ram
+// Shivam verma
+
+#include <bits/stdc++.h>
+#include <unordered_map>
+#include <unordered_set>
 #include <iostream>
+#include <map>
+#include <set>
 using namespace std;
 
-char grid[8][8];
-int countSolutions = 0;
+// some common Defination
 
-bool CanPlace(int row, int col) {
-    for (int i = 0; i < row; i++) {
-        if (grid[i][col] == '*') return false;
-    }
+const long long INF = LLONG_MAX;
+#define ll long long int
+#define all(v) (v).begin(), (v).end()
+#define rall(v) (v).rbegin(), (v).rend()
+#define vc vector<ll>
+typedef pair<int, int> pi;
+const int mod = 1000000007;
+const int N = 1e5;
+#define endl "\n"
+#define pb push_back
+#define mp make_pair
+#define f first
+#define s second
+#define sloop(i, a, b) for (int i = a; i < b; i++)
+#define loop(i, b) for (int i = 0; i < b; i++)
+#define rloop(i, a, b) for (int i = a; i >= b; i--)
+#define print(str) cout << str << "\n"
 
-    for (int i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--) {
-        if (grid[i][j] == '*') return false;
-    }
+char grid[9][9];
+int ct = 0;
 
-    for (int i = row - 1, j = col + 1; i >= 0 && j < 8; i--, j++) {
-        if (grid[i][j] == '*') return false;
-    }
+bool CanPlace(int x, int y)
+{
+    int nx = x, ny = y;
+
+    while (nx--)
+        if (grid[nx][ny] == 'Q')
+            return false;
+
+    nx = x; ny = y;
+    while (nx-- && ny--)
+        if (grid[nx][ny] == 'Q')
+            return false;
+
+    nx = x; ny = y;
+    while (nx-- && ny++ < 8)
+        if (grid[nx][ny] == 'Q')
+            return false;
 
     return true;
 }
 
-void Solve(int row) {
-    if (row == 8) {
-        countSolutions++;
-        return;
-    }
+ll Solve(int row)
+{
+    if (row == 9)
+        return 1;
 
-    for (int col = 0; col < 8; col++) {
-        if (grid[row][col] == '.' && CanPlace(row, col)) {
-            grid[row][col] = '*';
-            Solve(row + 1);
+    ll ways = 0;
+    for (int col = 1; col <= 8; col++)
+    {
+        if (CanPlace(row, col) && grid[row][col] != '*')
+        {
+            grid[row][col] = 'Q';
+            ways += Solve(row + 1);
             grid[row][col] = '.'; 
         }
     }
+    return ways;
 }
 
-int main() {
-    for (int i = 0; i < 8; i++) {
-        for (int j = 0; j < 8; j++) {
-            cin >> grid[i][j]; 
+int main()
+{
+    for (int i = 1; i <= 8; i++)
+    {
+        for (int j = 1; j <= 8; j++)
+        {
+            cin >> grid[i][j];
         }
     }
 
-    Solve(0);
-    cout << countSolutions << endl;
+    cout << Solve(1) << endl;
 
     return 0;
 }

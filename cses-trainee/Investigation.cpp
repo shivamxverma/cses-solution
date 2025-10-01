@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <iostream>
+#include <map>
 using namespace std;
 
 // some common Defination
@@ -42,83 +43,25 @@ const int N = 1e5;
 #define upb(a, x) (upper_bound((a).begin(), (a).end(), (x)) - (a).begin())
 
 
-// #ifndef ONLINE_JUDGE
-// #define shivam(x) cerr << #x <<" "; _print(x); cerr << endl;
-// #else
-// #define shivam(x)
-// #endif
-// template <class T> void _print(T t){cerr<<t;}
-// template <class T, class V> void _print(pair <T, V> p) {cerr << "{"; _print(p.first); cerr << ","; _print(p.second); cerr << "}";}
-// template <class T> void _print(vector <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
-// template <class T, class V> void _print(map <T, V> v) {cerr << "[ "; for (auto i : v) {_print(i); cerr << " ";} cerr << "]";}
-// template <class T, class V> void _print(unordered_map <T, V> v) {cerr << "[ "; for (auto i : v) {_print(i); cerr << " ";} cerr << "]";}
-// template <class T> void _print(set <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
-// template <class T> void _print(unordered_set <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
-// template <class T> void _print(multiset <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
-// template <class T> void _print(unordered_multiset <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
- 
-
-// input array
-
-// template <class T>
-// istream &operator>>(istream &in, vector<T> &v)
-// {
-//     for (auto &vl : v)
-//     {
-//         in >> vl;
-//     }
-//     return in;
-// }
-// template <typename T>
-// void pvec(vector<T> &v)
-// {
-//     for (auto i : v)
-//     {
-//         cout << i << " ";
-//     }
-//     cout << endl;
-// }
-
-// // output array
-
-// template <typename T>
-// ostream &operator<<(ostream &out, const vector<T> &v)
-// {
-//     for (const auto &i : v)
-//     {
-//         out << i << " ";
-//     }
-//     return out;
-// }
-
-// // Prefix sum
-
-// template <typename T>
-// void prefixSum(const vector<T> &arr, vector<T> &prefix)
-// {
-//     int n = arr.size();
-//     prefix.resize(n);
-//     prefix[0] = arr[0];
-//     for (int i = 1; i < n; i++)
-//     {
-//         prefix[i] = prefix[i - 1] + arr[i];
-//     }
-// }
-
 void MahavirCoder() {
     int n,m;cin>>n>>m;
     vector<vector<pair<int,ll>>> graph(n);
-    loop(i,n){
+    loop(i,m){
         int u,v,w;cin>>u>>v>>w;
         u--,v--;
         graph[u].push_back({v,w});
     }
 
     vector<ll> dist(n,LLONG_MAX);
-    vector<ll> routes(n,-1);
-    priority_queue<pair<ll, int>, vector<pair<ll, int>>, greater<pair<ll, int>>> pq;
+    vector<ll> ways(n,0);
+    vector<int> minFlights(n,INT_MAX);
+    vector<int> maxFlights(n,INT_MAX);
+    priority_queue<pair<ll,int>, vector<pair<ll,int>>, greater<pair<ll,int>>> pq;
     dist[0] = 0;
-    pq.push({0,0});
+    pq.push({0,0}); 
+    ways[0] = 1;
+    minFlights[0] = 0;
+    maxFlights[0] = 0;
 
     while(!pq.empty()){
         auto [cost,u] = pq.top();
@@ -131,13 +74,26 @@ void MahavirCoder() {
 
             if(dist[v] > newcost){
                 dist[v] = newcost;
+                ways[v] = ways[u];
+                minFlights[v] = minFlights[u] + 1;
+                maxFlights[v] = maxFlights[u] + 1;
                 pq.push({newcost,v});
+            } else if(dist[v] == newcost){
+                ways[v] = (ways[u] + ways[v])%mod;
+                minFlights[v] = min(minFlights[v], minFlights[u] + 1);
+                maxFlights[v] = max(maxFlights[v], maxFlights[u] + 1);
             }
         }
     }
 
     
+    if (dist[n - 1] == INF) {
+        cout << -1 << endl; 
+        return;
+    }
 
+    cout << dist[n - 1] << " " << ways[n - 1] << " " 
+         << minFlights[n - 1] << " " << maxFlights[n - 1] << endl;
 }
 
 

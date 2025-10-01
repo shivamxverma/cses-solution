@@ -75,49 +75,32 @@ int flip_bit(int x,int k){return x^(1<<k);}
 
 
 template <class T> istream & operator>> (istream &in, vector<T> &v) {
-	for (auto &vl : v) { in >> vl;} return in; }
+    for (auto &vl : v) { in >> vl;} return in; }
 template <typename T> void pvec(vector<T>&v) {
-	for(auto i : v) {cout << i << " ";} cout << endl;}
+    for(auto i : v) {cout << i << " ";} cout << endl;}
 
 // output array    
 
 template <typename T>
 ostream& operator<<(ostream &out, const vector<T>& v) {
-	for (const auto &i : v) {
-		out << i << " ";
-	}
-	return out;
+    for (const auto &i : v) {
+        out << i << " ";
+    }
+    return out;
+}
+
+void Solve(){
+
 }
 
 void MahavirCoder(){
-	int n;cin>>n;
-	vector<int> v(n);
-	cin>>v;
-
-	sort(all(v));
-
-	int i = 0,j = n-1;
-	ll sum = 0;
-	ll ans = 0;
-
-	while(i < j){
-		if(sum+v[i] <= v[j]){
-			sum += v[i];
-			i++;
-		} else {
-			sum = v[i];
-			ans += 2*(1ll)*v[j];
-			j--;
-		}
-	}
-
-	cout << ans << endl;
+    
 }
 
 int main(){
-	int t = 1;
-	// cin>>t;
-	while(t--){
-		MahavirCoder();
-	}
+    int t = 1;
+    cin>>t;
+    while(t--){
+        MahavirCoder();
+    }
 }

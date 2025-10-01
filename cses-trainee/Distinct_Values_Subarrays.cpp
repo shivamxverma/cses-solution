@@ -363,12 +363,7 @@ void MahavirCoder(){
 
   loop(i,n){
 	if(dubi[v[i]]>0)prev = max(prev,dubi[v[i]]);
-
-	if(prev == -1){
-		ans += i+1;
-	} else {
-		ans += i+1-prev;
-	}
+	ans += i+1 - (prev != -1 ? prev : 0);
 	dubi[v[i]] = i+1;
   }
 

@@ -75,49 +75,54 @@ int flip_bit(int x,int k){return x^(1<<k);}
 
 
 template <class T> istream & operator>> (istream &in, vector<T> &v) {
-	for (auto &vl : v) { in >> vl;} return in; }
+    for (auto &vl : v) { in >> vl;} return in; }
 template <typename T> void pvec(vector<T>&v) {
-	for(auto i : v) {cout << i << " ";} cout << endl;}
+    for(auto i : v) {cout << i << " ";} cout << endl;}
 
 // output array    
 
 template <typename T>
 ostream& operator<<(ostream &out, const vector<T>& v) {
-	for (const auto &i : v) {
-		out << i << " ";
-	}
-	return out;
+    for (const auto &i : v) {
+        out << i << " ";
+    }
+    return out;
 }
 
 void MahavirCoder(){
-	int n;cin>>n;
-	vector<int> v(n);
-	cin>>v;
+    int n,m;cin>>n>>m;
+    vector<int> a(n);
+    loop(i,n)cin>>a[i];
+    vector<vector<int>> dp(31,vector<int>(n,0));
 
-	sort(all(v));
+    for(int i=0 ; i<n ; i++){
+        dp[0][i] = a[i] - 1;
+    }
 
-	int i = 0,j = n-1;
-	ll sum = 0;
-	ll ans = 0;
+    for(int i=1 ; i<=30 ; i++){
+        for(int j = 0 ; j < n ; j++){
+            dp[i][j] = dp[i-1][ dp[i-1][j]];
+        }
+    }
 
-	while(i < j){
-		if(sum+v[i] <= v[j]){
-			sum += v[i];
-			i++;
-		} else {
-			sum = v[i];
-			ans += 2*(1ll)*v[j];
-			j--;
-		}
-	}
-
-	cout << ans << endl;
+    while(m--){
+        int x,k;cin>>x>>k;
+        x--;
+        for(int i = 0; i <= 30; i++){
+            if(k & (1LL << i)){
+                x = dp[i][x];
+            }
+        }
+        cout << x+1 << endl;
+    }
 }
 
 int main(){
-	int t = 1;
-	// cin>>t;
-	while(t--){
-		MahavirCoder();
-	}
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t = 1;
+    // cin>>t;
+    while(t--){
+        MahavirCoder();
+    }
 }

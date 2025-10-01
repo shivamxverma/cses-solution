@@ -75,49 +75,54 @@ int flip_bit(int x,int k){return x^(1<<k);}
 
 
 template <class T> istream & operator>> (istream &in, vector<T> &v) {
-	for (auto &vl : v) { in >> vl;} return in; }
+    for (auto &vl : v) { in >> vl;} return in; }
 template <typename T> void pvec(vector<T>&v) {
-	for(auto i : v) {cout << i << " ";} cout << endl;}
+    for(auto i : v) {cout << i << " ";} cout << endl;}
 
 // output array    
 
 template <typename T>
 ostream& operator<<(ostream &out, const vector<T>& v) {
-	for (const auto &i : v) {
-		out << i << " ";
-	}
-	return out;
+    for (const auto &i : v) {
+        out << i << " ";
+    }
+    return out;
+}
+
+int coins[101];
+int dp[101][10100];
+
+bool Solve(int n,int x){
+    if(x == 0)return true;
+    if(n == -1){
+        return false;
+    }
+    if(dp[n][x] != -1)return dp[n][x];
+    bool take = false;
+    if(coins[n] <= x)take = Solve(n-1,x-coins[n]);
+    bool nottake = Solve(n-1,x);
+    return dp[n][x] = take | nottake ;
 }
 
 void MahavirCoder(){
-	int n;cin>>n;
-	vector<int> v(n);
-	cin>>v;
+    int n,x;cin>>n>>x; 
+    loop(i,n)cin>>coins[i];
 
-	sort(all(v));
+    memset(dp,-1,sizeof(dp));
 
-	int i = 0,j = n-1;
-	ll sum = 0;
-	ll ans = 0;
+    while(x--){
+        int pos;cin>>pos;
+        bool yes = Solve(n,pos);
 
-	while(i < j){
-		if(sum+v[i] <= v[j]){
-			sum += v[i];
-			i++;
-		} else {
-			sum = v[i];
-			ans += 2*(1ll)*v[j];
-			j--;
-		}
-	}
-
-	cout << ans << endl;
+        if(yes)cout << "Yes\n";
+        else cout << "No\n";
+    }
 }
 
 int main(){
-	int t = 1;
-	// cin>>t;
-	while(t--){
-		MahavirCoder();
-	}
+    int t = 1;
+    // cin>>t;
+    while(t--){
+        MahavirCoder();
+    }
 }

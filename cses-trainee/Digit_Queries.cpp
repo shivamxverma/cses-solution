@@ -75,49 +75,76 @@ int flip_bit(int x,int k){return x^(1<<k);}
 
 
 template <class T> istream & operator>> (istream &in, vector<T> &v) {
-	for (auto &vl : v) { in >> vl;} return in; }
+    for (auto &vl : v) { in >> vl;} return in; }
 template <typename T> void pvec(vector<T>&v) {
-	for(auto i : v) {cout << i << " ";} cout << endl;}
+    for(auto i : v) {cout << i << " ";} cout << endl;}
 
 // output array    
 
 template <typename T>
 ostream& operator<<(ostream &out, const vector<T>& v) {
-	for (const auto &i : v) {
-		out << i << " ";
-	}
-	return out;
+    for (const auto &i : v) {
+        out << i << " ";
+    }
+    return out;
 }
 
-void MahavirCoder(){
-	int n;cin>>n;
-	vector<int> v(n);
-	cin>>v;
+long long power(long long a, long long b)
+{  
+    long long res = 1;
+    while (b > 0) {
+        
+        if (b & 1) {
+            res = (res * a);
+        }
+        a = (a * a);
+        b >>= 1;
+    }
+    return res;
+}
 
-	sort(all(v));
-
-	int i = 0,j = n-1;
-	ll sum = 0;
-	ll ans = 0;
-
-	while(i < j){
-		if(sum+v[i] <= v[j]){
-			sum += v[i];
-			i++;
-		} else {
-			sum = v[i];
-			ans += 2*(1ll)*v[j];
-			j--;
-		}
-	}
-
-	cout << ans << endl;
+void MahavirCoder() {
+    ll n;
+    cin >> n;
+    vector<ll> tt(20,0);
+    ll prev = 0;
+    ll sum1to9 = 45;
+    for(ll i = 1 ; power(10,i) <= n ; i++){
+        ll cur = 10*prev + power(10,i-1)*sum1to9;
+        tt[i] = cur;
+        prev = tt[i];
+    }
+    ll dd = 1;
+    while (dd * ((ll)pow(10, dd - 1)) * 9 < n) {
+        n = n - dd * ((ll)pow(10, dd - 1)) * 9;
+        dd++;
+    }
+    ll number = (ll)pow(10, dd - 1) + (n - 1) / dd;
+    string numberStr = to_string(number);
+    // cout << numberStr << endl;
+    // cout << "-------------\n";
+    int nod = numberStr.size() - 1;
+    ll sum = 0;
+    for(int i=0 ; i<=nod ; i++){
+        int digit = numberStr[i] - '0' - 1;
+        // cout << digit << endl;
+        if(digit >= 0){
+            if(i < nod){
+                // cout << (digit+1) << " " << tt[nod-i] << " " << power(10,nod-i-1) << " " << (digit*(digit+1))/2 << endl;
+                sum += (digit + 1)*tt[nod-i] + power(10,nod-i-1) * (digit*(digit+1))/2;
+            } else {
+                // cout << ((digit+1)*(digit+2))/2 << endl;
+                sum += ((digit+1)*(digit+2))/2;
+            }
+        }
+    }
+    cout << sum << endl;
 }
 
 int main(){
-	int t = 1;
-	// cin>>t;
-	while(t--){
-		MahavirCoder();
-	}
+    int t = 1;
+    cin>>t;
+    while(t--){
+        MahavirCoder();
+    }
 }

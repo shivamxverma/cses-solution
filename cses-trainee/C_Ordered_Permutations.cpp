@@ -75,49 +75,43 @@ int flip_bit(int x,int k){return x^(1<<k);}
 
 
 template <class T> istream & operator>> (istream &in, vector<T> &v) {
-	for (auto &vl : v) { in >> vl;} return in; }
+    for (auto &vl : v) { in >> vl;} return in; }
 template <typename T> void pvec(vector<T>&v) {
-	for(auto i : v) {cout << i << " ";} cout << endl;}
+    for(auto i : v) {cout << i << " ";} cout << endl;}
 
 // output array    
 
 template <typename T>
 ostream& operator<<(ostream &out, const vector<T>& v) {
-	for (const auto &i : v) {
-		out << i << " ";
-	}
-	return out;
+    for (const auto &i : v) {
+        out << i << " ";
+    }
+    return out;
 }
 
 void MahavirCoder(){
-	int n;cin>>n;
-	vector<int> v(n);
-	cin>>v;
-
-	sort(all(v));
-
-	int i = 0,j = n-1;
-	ll sum = 0;
-	ll ans = 0;
-
-	while(i < j){
-		if(sum+v[i] <= v[j]){
-			sum += v[i];
-			i++;
-		} else {
-			sum = v[i];
-			ans += 2*(1ll)*v[j];
-			j--;
-		}
-	}
-
-	cout << ans << endl;
+    int n, k;
+    cin>>n>>k;
+    if(n <= 60 && (1ll << (n-1)) < k){
+        cout << -1 << endl;
+        return ;
+    } 
+    --k;
+    deque<int> dq;
+    dq.push_front(n);
+    for(int i=n-1 ; i ; --i){
+        if(k&1)dq.push_front(i);
+        else dq.push_back(i);
+        k>>=1;
+    }
+    while(!dq.empty()) cout << dq.back() << " ",dq.pop_back();
+    cout << "\n";
 }
 
 int main(){
-	int t = 1;
-	// cin>>t;
-	while(t--){
-		MahavirCoder();
-	}
+    int t = 1;
+    cin>>t;
+    while(t--){
+        MahavirCoder();
+    }
 }
